@@ -1,10 +1,10 @@
-Package: mapapp
+Package: filtrafilet
 Type: OpenCPU Application
-Title: create basic country maps
+Title: Filtra o filet de uma base
 Version: 0.1
-Date: 2013-09-04
-Author: Jeroen Ooms
-Maintainer: Jeroen <jeroenooms@gmail.com>
+Date: 2016-03-25
+Author: Kleber Manoel Infante
+Maintainer: Kleber <corujito@gmail.com>
 Description: create basic country maps
 License: Apache2
 LazyData: true
