@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Filtra Filé</title>
+<title>Filtra Filet</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -24,9 +24,9 @@ $(document).ready(function() {
   
   //globals
   var dataframe;
-  var mapdata;
-  var joincode;
-  var countrycolumn;
+  // var mapdata;
+  // var joincode;
+  // var countrycolumn;
   
   //automatically upload CSV file on change.
   $("#csvfile").on("change", function(){
@@ -35,10 +35,10 @@ $(document).ready(function() {
       
       //clear state
       dataframe = null;
-      mapdata = null;
-      joincode = null;
-      countrycolumn = null;
-      $("#nameJoinColumn").empty();  
+      // mapdata = null;
+      // joincode = null;
+      // countrycolumn = null;
+      // $("#nameJoinColumn").empty();  
       $("#nameColumnToPlot").empty();
       $("#successdiv").empty();
       $("#errordiv").empty()
@@ -60,13 +60,13 @@ $(document).ready(function() {
   
   function datainfo(){
     return ocpu.rpc("datainfo", {mydata : dataframe}, function(jsondata){
-      $.each(jsondata.strings, function(i, val){
-        if(val){
-          $("<option>").text(val).appendTo("#nameJoinColumn");
-        }
-      });
+      // $.each(jsondata.strings, function(i, val){
+      //   if(val){
+      //     $("<option>").text(val).appendTo("#nameJoinColumn");
+      //   }
+      // });
       
-      $.each(jsondata.other, function(i, val){
+      $.each(jsondata.all, function(i, val){
         if(val){
           $("<option>").text(val).appendTo("#nameColumnToPlot");
         }
@@ -79,7 +79,7 @@ $(document).ready(function() {
       
   function joindata(e){
     var newjoincode = $("#joinCode").val();
-    var newcountrycolumn = $("#nameJoinColumn").val();
+    // var newcountrycolumn = $("#nameJoinColumn").val();
     
     $("#plotbutton").attr("disabled", "disabled");
     return ocpu.call("join", {
@@ -191,7 +191,7 @@ $(document).ready(function() {
           
           <fieldset id="datafields">
             
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Country Column</label>
               <select class="form-control" id="nameJoinColumn">        
               </select>    
@@ -206,12 +206,12 @@ $(document).ready(function() {
                 <option>NAME</option>
                 <option>UN</option>
               </select>    
-            </div>   
+            </div>    -->
 
           </fieldset>         
           
           <fieldset id="mapfields">
-            <legend>(2) Create Map</legend>            
+            <legend>(2) Create Plot</legend>            
             
             <div class="form-group">
               <label>Plot Column</label>
@@ -219,7 +219,7 @@ $(document).ready(function() {
               </select>   
             </div>
             
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Color Palette</label>
               <select class="form-control" id="colourPalette">
                 <option selected="selected">heat</option>
@@ -236,7 +236,7 @@ $(document).ready(function() {
             <div class="form-group">
               <label>Map Title</label>  
               <input class="form-control" id="mapTitle" type="text" placeholder="My Plot">
-            </div>
+            </div> -->
             
           </fieldset>
           
