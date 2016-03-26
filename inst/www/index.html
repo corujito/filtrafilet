@@ -42,7 +42,7 @@ $(document).ready(function() {
       $("#nameColumnToPlot").empty();
       $("#successdiv").empty();
       $("#errordiv").empty()
-      // $("#plotbutton").attr("disabled", "disabled");
+      $("#plotbutton").attr("disabled", "disabled");
       $("#filtrabutton").attr("disabled", "disabled");
       
       //call uploaddata function
@@ -100,15 +100,15 @@ $(document).ready(function() {
     console.log("makeplot()");
     console.log(dataframe);
     $("#plotbutton").attr("disabled", "disabled");
-    return $("#plotdiv").rplot("randomplot", { n : 1000, dist : "normal"});
-    // .rplot("geragrafico", {
-    //   mydata : dataframe, 
-    //   nameColumnToPlot : $("#nameColumnToPlot").val()
-    // }).fail(function(jqXHR){
-    //   errormsg(jqXHR.responseText);
-    // }).always(function(){
-    //   $("#plotbutton").removeAttr("disabled", "disabled");    
-    // });
+    //return $("#plotdiv").rplot("randomplot", { n : 1000, dist : ""});
+    return $("#plotdiv").rplot("geragrafico", {
+      mydata : dataframe, 
+      nameColumnToPlot : $("#nameColumnToPlot").val()
+    }).fail(function(jqXHR){
+      errormsg(jqXHR.responseText);
+    }).always(function(){
+      $("#plotbutton").removeAttr("disabled", "disabled");    
+    });
   }
   
   function successmsg(text){
@@ -195,7 +195,7 @@ $(document).ready(function() {
           </fieldset>
           
           <fieldset id="buttondiv">
-            <button id="plotbutton" type="button" class="btn btn-primary">Plot!</button>
+            <button id="plotbutton" type="button" class="btn btn-primary" disabled="disabled">Plot!</button>
           </fieldset>
 
         </form>
