@@ -98,17 +98,17 @@ $(document).ready(function() {
   
   function makeplot(){
     console.log("makeplot()");
-    console.log($("#nameColumnToPlot").val());
     console.log(dataframe);
     $("#plotbutton").attr("disabled", "disabled");
-    return $("#plotdiv").rplot("geragrafico", {
-      mydata : dataframe, 
-      nameColumnToPlot : $("#nameColumnToPlot").val()
-    }).fail(function(jqXHR){
-      errormsg(jqXHR.responseText);
-    }).always(function(){
-      $("#plotbutton").removeAttr("disabled", "disabled");    
-    });
+    return $("#plotdiv").rplot("randomplot", { n : 1000, dist : "normal"});
+    // .rplot("geragrafico", {
+    //   mydata : dataframe, 
+    //   nameColumnToPlot : $("#nameColumnToPlot").val()
+    // }).fail(function(jqXHR){
+    //   errormsg(jqXHR.responseText);
+    // }).always(function(){
+    //   $("#plotbutton").removeAttr("disabled", "disabled");    
+    // });
   }
   
   function successmsg(text){
