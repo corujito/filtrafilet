@@ -61,7 +61,7 @@ $(document).ready(function() {
   
   function datainfo(){
     return ocpu.rpc("datainfo", {mydata : dataframe}, function(jsondata){
-      $.each(jsondata.strings, function(i, val){
+      $.each(jsondata.all, function(i, val){
         if(val){
           $("<option>").text(val).appendTo("#nameColumnToPlot");
         }
@@ -100,7 +100,7 @@ $(document).ready(function() {
     console.log("makeplot()");
     console.log(dataframe);
     $("#plotbutton").attr("disabled", "disabled");
-    //return $("#plotdiv").rplot("randomplot", { n : 1000, dist : ""});
+    
     return $("#plotdiv").rplot("geragrafico", {
       mydata : dataframe, 
       nameColumnToPlot : $("#nameColumnToPlot").val()
