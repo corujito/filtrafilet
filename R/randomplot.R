@@ -6,18 +6,7 @@
 #' @param n numer of random values 
 #' @param dist one of "normal" or "uniform".
 randomplot <- function(n, dist=c("normal", "uniform")){
-  #input validation
-  dist <- match.arg(dist)
-  stopifnot(n < 1e6)
-  
-  if(dist == "normal"){
-    hist(rnorm(n))
-  }
-  
-  if(dist == "uniform"){
-    hist(runif(n))
-  }
-  
+  hist(rnorm(100))
   #return nothing
   invisible();  
 }
