@@ -97,6 +97,9 @@ $(document).ready(function() {
   }
   
   function makeplot(){
+    console.log("makeplot()");
+    console.log($("#nameColumnToPlot").val());
+    console.log(dataframe);
     $("#plotbutton").attr("disabled", "disabled");
     return $("#plotdiv").rplot("geragrafico", {
       mydata : dataframe, 
@@ -117,6 +120,7 @@ $(document).ready(function() {
   }  
     
   $("#plotbutton").on("click", function(){
+    makeplot();
     // if(joincode == $("#joinCode").val() && countrycolumn == $("#nameJoinColumn").val()){
     //   //nothing has changed since last join
     //   makeplot().always(); 
