@@ -6,7 +6,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     ## Base com JCR ##
     #jcr <- read.csv('data/JournalHomeGrid.csv', header = F, sep = ",", stringsAsFactors = FALSE)
     #jcr <- jcr[-1,]
-    jcr[["Full Journal Title"]] <- toupper(jcr[["Full Journal Title"]]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
+    #jcr[["Full Journal Title"]] <- toupper(jcr[["Full Journal Title"]]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
     
     dados.jcr <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "Full Journal Title", all.x = TRUE)
     
