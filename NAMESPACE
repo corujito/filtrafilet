@@ -1,7 +1,3 @@
-importFrom(rworldmap, joinCountryData2Map)
-importFrom(rworldmap, mapCountryData)
 export(uploaddata)
 export(datainfo)
 export(geragrafico)
-export(join)
-export(map)

@@ -1,11 +1,11 @@
 Package: filtrafilet
-Type: OpenCPU Application
-Title: Filtra o filet de uma base
+Type: Filtra Filet Application
+Title: Filtra o filet da base
 Version: 0.1
 Date: 2016-03-25
 Author: Kleber Manoel Infante
 Maintainer: Kleber <corujito@gmail.com>
-Description: create basic country maps
+Description: Seleciona os artigos mais importantes a partir de base grande de artigos
 License: Apache2
 LazyData: true
 Imports:
