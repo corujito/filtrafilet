@@ -114,10 +114,10 @@ $(document).ready(function() {
     
     return $("#plotdiv2").rplot("filtrafilet", {
       dados : dataframe,
-      jcr.min : $("#jcr.min").val(),
-      ano.min : $("#ano.min").val(),
-      cit.ano : $("#cit.ano").val(),
-      porc.pareto : $("#porc.pareto").val()
+      jcrmin : $("#jcrmin").val(),
+      anomin : $("#anomin").val(),
+      citano : $("#citano").val(),
+      porcpareto : $("#porcpareto").val()
     }).fail(function(jqXHR){
       errormsg(jqXHR.responseText);
     }).always(function(){
@@ -249,7 +249,7 @@ $(document).ready(function() {
           
           <fieldset id="datafields2">
             <div class="form-group">
-              <label>jcr.min</label>
+              <label>jcrmin</label>
               <select class="form-control" id="jcr.min">        
                 <option>1</option>
                 <option selected="selected">1.5</option>
@@ -260,7 +260,7 @@ $(document).ready(function() {
             </div>
             
             <div class="form-group">
-              <label>ano.min</label>
+              <label>anomin</label>
               <select class="form-control" id="ano.min">
                 <option>1</option>
                 <option selected="selected">2</option>
@@ -270,7 +270,7 @@ $(document).ready(function() {
               </select>    
             </div>   
             <div class="form-group">
-              <label>cit.ano</label>
+              <label>citano</label>
               <select class="form-control" id="cit.ano">
                 <option selected="selected">0</option>
                 <option>1</option>
@@ -281,7 +281,7 @@ $(document).ready(function() {
             </div>
             
             <div class="form-group">
-              <label>por.pareto</label>  
+              <label>porpareto</label>  
               <select class="form-control" id="por.pareto">
                 <option>0</option>
                 <option>25</option>

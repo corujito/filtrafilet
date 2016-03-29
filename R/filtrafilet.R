@@ -1,4 +1,4 @@
-filtrafilet <- function(dados, jcr.min, ano.min, cit.ano, porc.pareto) {
+filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
 	## Base com todos os artigos selecionados ##
     #dados <- rbind(dados1, dados2)
     dados[,6] <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
@@ -11,10 +11,10 @@ filtrafilet <- function(dados, jcr.min, ano.min, cit.ano, porc.pareto) {
     dados.jcr <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "V2", all.x = TRUE)
     
     ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados.jcr, dados.jcr[,97]>=jcr.min)
+    filtro.jcr <- subset(dados.jcr, dados.jcr[,97]>=jcrmin)
     
     ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
-    filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-ano.min & filtro.jcr$Average.per.Year >= cit.ano)
+    filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin & filtro.jcr$Average.per.Year >= citano)
     
     ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS 2 ANOS) ##
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-2)
@@ -40,7 +40,7 @@ filtrafilet <- function(dados, jcr.min, ano.min, cit.ano, porc.pareto) {
       artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
     }
     
-    filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porc.pareto)
+    filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
     
     filtro.pareto <- subset(filtro.pareto, select = -c(101,102))
     
