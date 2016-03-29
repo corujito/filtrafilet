@@ -5,6 +5,7 @@ uploaddata <- function(csvfile, ...){
   
   #read csv data
   mydata <- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
+  #mydata <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
   
   #convert columns with 7 or less levels to factors
   for(i in seq_along(mydata)){

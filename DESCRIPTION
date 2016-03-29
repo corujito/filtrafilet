@@ -9,5 +9,5 @@ Description: Seleciona os artigos mais importantes a partir de base grande de ar
 License: Apache2
 LazyData: true
 Imports:
-    rworldmap
+    gridExtra
 Suggests: opencpu (>= 1.0.1)

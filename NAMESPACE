@@ -1,3 +1,5 @@
+importFrom(gridExtra, grid.table)
 export(uploaddata)
 export(datainfo)
 export(geragrafico)
+export(filtrafilet)
