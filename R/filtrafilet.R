@@ -18,7 +18,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr$Journal.Impact.Factor)>=jcrmin)
 
     list(
-    message = paste(dados.jcr$Journal.Impact.Factor[1:3])
+    message = paste(as.numeric(dados.jcr$Journal.Impact.Factor)>=jcrmin)
   )
    
     # # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
