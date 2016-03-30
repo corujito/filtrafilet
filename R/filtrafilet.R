@@ -24,7 +24,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
     list(
-    	message = paste(nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), anomin, citano)
+    	message = paste(colnames(filtro.artigos.antigos))
   	)
     # soma.citacoes <- 0
     # #filtro.artigos.antigos[150,20] <- 0
