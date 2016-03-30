@@ -45,28 +45,25 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     }
     
     filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
+    
+    # filtro.pareto <- subset(filtro.pareto, select = -c(100,101))
+    
+    ## Artigos finais ##
+    #print(ncol(filtro.artigos.recentes))
+    #print(ncol(filtro.pareto))
 
-    list(
-    	message = paste(ncol(filtro.pareto), nrow(filtro.pareto), ncol(filtro.artigos.recentes), colnames(filtro.pareto), colnames(filtro.artigos.recentes))
-  	)
-    
-    # filtro.pareto <- subset(filtro.pareto, select = -c(101,102))
-    
-    # ## Artigos finais ##
-    # #print(ncol(filtro.artigos.recentes))
-    # #print(ncol(filtro.pareto))
-    
-    # artigos.finais <- rbind(filtro.artigos.recentes[,1:100],filtro.pareto[,1:100])
+    artigos.finais <- rbind(filtro.artigos.recentes[,1:nrow(filtro.artigos.recentes)],filtro.pareto[,1:nrow(filtro.artigos.recentes)])
 
-    # ## SAÍDA 1 ##
-    # quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(filtro.pareto), 
-    #                                 nrow(artigos.finais)),c("Quantidade de documentos inciais", "Filtro JCR", "Artigos recentes", 
-    #                                 "Artigos antigos", "Filtro Pareto", "Quantidade de artigos selecionados"))
+    ## SAÍDA 1 ##
+    quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(filtro.pareto), 
+                                    nrow(artigos.finais)),c("Quantidade de documentos inciais", "Filtro JCR", "Artigos recentes", 
+                                    "Artigos antigos", "Filtro Pareto", "Quantidade de artigos selecionados"))
    
-    # library(gridExtra)
+    library(gridExtra)
+
+    grid.table(quantidade.filtros, cols = c("Quantidade","Filtros")) # TABELA ESTILO GRÁFICO - PARA APARECER NA TELA
 
     # # ## SAÍDA 2 ##
-    # grid.table(quantidade.filtros, cols = c("Quantidade","Filtros")) # TABELA ESTILO GRÁFICO - PARA APARECER NA TELA
 
     # ## Criando arquivo de bibliografi ##
     # citacao <- 0
