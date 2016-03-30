@@ -16,17 +16,16 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
     filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr$Journal.Impact.Factor)>=jcrmin)
-
-    list(
-    	message = paste(nrow(filtro.jcr), jcrmin)
-  	)
    
     # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
-    # filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin & filtro.jcr$Average.per.Year >= citano)
+    filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin & filtro.jcr$Average.per.Year >= citano)
     
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
-    # filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
+    filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
+    list(
+    	message = paste(nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), anomin, citano)
+  	)
     # soma.citacoes <- 0
     # #filtro.artigos.antigos[150,20] <- 0
     # # Obtendo o total de citações #
