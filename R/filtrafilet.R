@@ -4,20 +4,20 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     dados[,6] <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
     
     ## Base com JCR ##
-    #jcr <- read.csv('data/JournalHomeGrid.csv', header = F, sep = ",", stringsAsFactors = FALSE)
+    #jcr <- read.csv('data/jcr.csv', header = F, sep = ",")
     #jcr <- jcr[-1,]
-    jcr[["FullJournalTitle"]] <- toupper(jcr[["FullJournalTitle"]]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
-    
-    dados.jcr <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "FullJournalTitle", all.x = TRUE)
+    jcr[,2] <- toupper(jcr[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
+
+    dados.jcr <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "V2", all.x = TRUE)
     
     ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados.jcr, dados.jcr[,97]>=jcrmin)
-    
+    filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr[,97])>=jcrmin)
+   
     ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin & filtro.jcr$Average.per.Year >= citano)
     
-    ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS 2 ANOS) ##
-    filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-2)
+    ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
+    filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
     soma.citacoes <- 0
     #filtro.artigos.antigos[150,20] <- 0
@@ -44,6 +44,10 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     
     filtro.pareto <- subset(filtro.pareto, select = -c(101,102))
     
+    ## Artigos finais ##
+    #print(ncol(filtro.artigos.recentes))
+    #print(ncol(filtro.pareto))
+    
     artigos.finais <- rbind(filtro.artigos.recentes[,1:100],filtro.pareto[,1:100])
 
     ## SAÍDA 1 ##
@@ -52,11 +56,12 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
                                     "Artigos antigos", "Filtro Pareto", "Quantidade de artigos selecionados"))
    
     library(gridExtra)
-    grid.table(quantidade.filtros, cols = c("Quantidade","Filtros")) # TABELA ESTILO GRÁFICO - PARA APARECER NA TELA
 
     # ## SAÍDA 2 ##
+    grid.table(quantidade.filtros, cols = c("Quantidade","Filtros")) # TABELA ESTILO GRÁFICO - PARA APARECER NA TELA
 
     # ## Criando arquivo de bibliografi ##
+    # citacao <- 0
     # for (i in 1:nrow(artigos.finais)){
     #       citacao[i] <- paste(artigos.finais$Authors[i],". ", artigos.finais$Title[i],". ", artigos.finais$Source.Title[i],", vol.", artigos.finais$Volume[i], 
     #                  ", p. ", artigos.finais$Beginning.Page[i], "-", artigos.finais$Ending.Page[i], ", ",  artigos.finais$Publication.Year[i], ".", sep="")
