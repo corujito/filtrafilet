@@ -14,43 +14,30 @@
 selecaoDocumentos <- function(arquivo, jcr.min, ano.min, cit.ano, porc.pareto) {
 
             ## Leitura das bases selecionados no web of science ##
-            dados <- read.csv(arquivo, sep = ",", stringsAsFactors = FALSE)
-            ##dados2 <- read.csv(dados2, sep = ",", stringsAsFactors = FALSE)
-            
-            nrow(dados)
-            colnames(dados)
+            dados <- read.csv("/Users/renatapelissari/Downloads/savedrecs_2.csv", sep = ",", stringsAsFactors = FALSE)
             
             ## Base com todos os artigos selecionados ##
             #dados <- rbind(dados1, dados2)
             dados[,6] <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
             
             ## Base com JCR ##
-            jcr <- read.csv('/Users/renatapelissari/Downloads/JournalHomeGrid.csv', header = F, sep = ",", stringsAsFactors = FALSE)
+            jcr <- read.csv('/Users/renatapelissari/Downloads/JournalHomeGrid.csv', header = F, sep = ",")
             jcr <- jcr[-1,]
-            jcr[,2] <- toupper(jcr$V2) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
+            jcr[,2] <- toupper(jcr[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
             
             dados.jcr <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "V2", all.x = TRUE)
             
-            nrow(dados.jcr)
-            colnames(dados.jcr)
-            
             ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
             
-            filtro.jcr <- subset(dados.jcr, dados.jcr[,97]>=jcr.min)
-            
-            nrow(filtro.jcr)
+            filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr[,97])>=jcr.min)
            
             ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
             
             filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-ano.min & filtro.jcr$Average.per.Year >= cit.ano)
             
-            nrow(filtro.artigos.recentes)
-            ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS 2 ANOS) ##
+            ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS ano.min ANOS) ##
             
-            filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-2)
-           # print(nrow(filtro.artigos.antigos)) #596 linhas
-            
-            nrow(filtro.artigos.antigos)
+            filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-ano.min)
             
             soma.citacoes <- 0
             #filtro.artigos.antigos[150,20] <- 0
@@ -90,6 +77,7 @@ selecaoDocumentos <- function(arquivo, jcr.min, ano.min, cit.ano, porc.pareto) {
             grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
        
             ## Criando arquivo de bibliografi ##
+            citacao <- 0
             for (i in 1:nrow(artigos.finais)){
                   citacao[i] <- paste(artigos.finais$Authors[i],". ", artigos.finais$Title[i],". ", artigos.finais$Source.Title[i],", vol.", artigos.finais$Volume[i], 
                              ", p. ", artigos.finais$Beginning.Page[i], "-", artigos.finais$Ending.Page[i], ", ",  artigos.finais$Publication.Year[i], ".", sep="")
@@ -104,5 +92,5 @@ selecaoDocumentos <- function(arquivo, jcr.min, ano.min, cit.ano, porc.pareto) {
             write.table(nome.artigos, "/Users/renatapelissari/Downloads/nome_artigos_citacoes", sep="\t")
 }           
 
-selecaoDocumentos("/Users/renatapelissari/Downloads/savedrecs (2).txt", 1.5, 2, 0, 70) 
+selecaoDocumentos("/Users/renatapelissari/Downloads/savedrecs_2.csv", 2.0, 2, 1, 80) 
 
