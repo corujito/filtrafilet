@@ -112,28 +112,28 @@ $(document).ready(function() {
   function filtrafilet(){
     $("#filtrabutton").attr("disabled", "disabled");
     
-    // var req = ocpu.rpc("filtrafilet", {
-    //   dados : dataframe,
-    //   jcrmin : $("#jcrmin").val(),
-    //   anomin : $("#anomin").val(),
-    //   citano : $("#citano").val(),
-    //   porcpareto : $("#porcpareto").val()
-    //     }, function(output){
-    //       console.log(output.message);
-    //     });
-
-
-    return $("#plotdiv2").rplot("filtrafilet", {
+    var req = ocpu.rpc("filtrafilet", {
       dados : dataframe,
       jcrmin : $("#jcrmin").val(),
       anomin : $("#anomin").val(),
       citano : $("#citano").val(),
       porcpareto : $("#porcpareto").val()
-    }).fail(function(jqXHR){
-      errormsg(jqXHR.responseText);
-    }).always(function(){
-      $("#filtrabutton").removeAttr("disabled", "disabled");    
-    });
+        }, function(output){
+          console.log(output.message);
+        });
+
+
+    // return $("#plotdiv2").rplot("filtrafilet", {
+    //   dados : dataframe,
+    //   jcrmin : $("#jcrmin").val(),
+    //   anomin : $("#anomin").val(),
+    //   citano : $("#citano").val(),
+    //   porcpareto : $("#porcpareto").val()
+    // }).fail(function(jqXHR){
+    //   errormsg(jqXHR.responseText);
+    // }).always(function(){
+    //   $("#filtrabutton").removeAttr("disabled", "disabled");    
+    // });
   }
   
   function successmsg(text){
