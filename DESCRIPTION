@@ -7,7 +7,7 @@ Author: Kleber Manoel Infante
 Maintainer: Kleber <corujito@gmail.com>
 Description: Seleciona os artigos mais importantes a partir de base grande de artigos
 License: Apache2
-LazyData: false
+LazyData: true
 Imports:
     gridExtra
 Suggests: opencpu (>= 1.0.1)
