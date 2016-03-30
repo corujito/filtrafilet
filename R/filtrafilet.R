@@ -15,7 +15,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     dados.jcr <- merge(x=dados, y=jcr2, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
     
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr$Journal.Impact.Factor)>=jcrmin)
+    filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr$Journal.Impact.Factor)>=5)
    
     # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin & filtro.jcr$Average.per.Year >= citano)
