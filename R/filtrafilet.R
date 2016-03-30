@@ -8,7 +8,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     #jcr1 <- jcr1[-1,]
     jcr1[,2] <- toupper(jcr1[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
 
-    dados.jcr <- merge(x=dados, y=jcr1, by.x = "Source.Title", by.y = "V2", all.x = TRUE)
+    dados.jcr <- merge(x=dados, y=jcr1, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
     
     ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
     filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr[,97])>=jcrmin)
