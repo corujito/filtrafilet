@@ -23,31 +23,32 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
+    soma.citacoes <- 0
+    # filtro.artigos.antigos[150,20] <- 0
+    # Obtendo o total de citações #
+    for (i in 1:nrow(filtro.artigos.antigos)) {
+      aux <- filtro.artigos.antigos[i,20] # melhorar!! Total.Citations
+      soma.citacoes = soma.citacoes + aux
+    }
+    
+    # Cálculo da % de citações de cada artigo em relação ao total de citações #
+    filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
+    filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
+    artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
+    
+    # Cálculo da % acumulada de citações #
+    artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
+    for (i in 2:nrow(filtro.artigos.antigos)) {
+      artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
+      aux <- artigos.antigos$Porcentagem.Citacao[i]
+      artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
+    }
+    
+    filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
+
     list(
-    	message = paste(colnames(filtro.artigos.antigos))
+    	message = paste(ncol(filtro.pareto), nrow(filtro.pareto), ncol(filtro.artigos.recentes), colnames(filtro.pareto), colnames(filtro.artigos.recentes))
   	)
-    # soma.citacoes <- 0
-    # #filtro.artigos.antigos[150,20] <- 0
-    # # Obtendo o total de citações #
-    # for (i in 1:nrow(filtro.artigos.antigos)) {
-    #   aux <- filtro.artigos.antigos[i,20]
-    #   soma.citacoes = soma.citacoes + aux
-    # }
-    
-    # # Cálculo da % de citações de cada artigo em relação ao total de citações #
-    # filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
-    # filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
-    # artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
-    
-    # # Cálculo da % acumulada de citações #
-    # artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
-    # for (i in 2:nrow(filtro.artigos.antigos)) {
-    #   artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
-    #   aux <- artigos.antigos$Porcentagem.Citacao[i]
-    #   artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
-    # }
-    
-    # filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
     
     # filtro.pareto <- subset(filtro.pareto, select = -c(101,102))
     
