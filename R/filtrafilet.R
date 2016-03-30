@@ -1,4 +1,8 @@
 filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
+    jcrmin  <- as.numeric(jcrmin)
+    anomin  <- as.numeric(anomin)
+    citano  <- as.numeric(citano)
+    porcpareto  <- as.numeric(porcpareto)
 	## Base com todos os artigos selecionados ##
     #dados <- rbind(dados1, dados2)
     dados[,6] <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
