@@ -87,6 +87,6 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
-  plot(table(mydata$nameColumnToPlot), type="l", col="blue", xlab = "Ano de publicação", 
+  plot(table(mydata$Publication.Year), type="l", col="blue", xlab = nameColumnToPlot, 
           ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
 }
