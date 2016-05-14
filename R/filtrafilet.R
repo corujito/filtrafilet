@@ -1,4 +1,4 @@
-filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
+filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto)  {
     jcrmin  <- as.numeric(jcrmin)
     anomin  <- as.numeric(anomin)
     citano  <- as.numeric(citano)
