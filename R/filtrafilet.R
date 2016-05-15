@@ -3,19 +3,9 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     anomin  <- as.numeric(anomin)
     citano  <- as.numeric(citano)
     porcpareto  <- as.numeric(porcpareto)
-	## Base com todos os artigos selecionados ##
-    #dados <- rbind(dados1, dados2)
-    dados[,6] <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
-    
-    ## Base com JCR ##
-    #jcr2 <- read.csv('data/jcr2.csv', header = F, sep = ",")
-    #jcr2 <- jcr2[-1,]
-    jcr2[,2] <- toupper(jcr2[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
-
-    dados.jcr <- merge(x=dados, y=jcr2, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
-    
+	
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados.jcr, as.numeric(dados.jcr$Journal.Impact.Factor)>=jcrmin)
+    filtro.jcr <- subset(dados, as.numeric(dados$Journal.Impact.Factor)>=jcrmin)
 
     list(
     message = paste(as.numeric(dados.jcr$Journal.Impact.Factor)>=100)
