@@ -1,4 +1,3 @@
-column_name_options <<- c("Publication.Year", "Authors", "Source.Title", "V5")
 datainfo <- function(mydata){
   list(
     #all = as.list(colnames(mydata)),
