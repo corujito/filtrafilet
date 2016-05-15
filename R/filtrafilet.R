@@ -87,17 +87,13 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
-    publicationyear_index <- 1
-    author_index <- 2
-    source_index <- 3
-    jcr_index <- 4
-    if (nameColumnToPlot == column_name_options[publicationyear_index]) {
+    if (nameColumnToPlot == "Publication.Year") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
-    } else if (nameColumnToPlot == column_name_options[author_index]) {
+    } else if (nameColumnToPlot == "Authors") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por autor")
-    } else if (nameColumnToPlot == column_name_options[source_index]) {
+    } else if (nameColumnToPlot == "Source.Title") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por revista")
-    } else if (nameColumnToPlot == column_name_options[jcr_index]) {
+    } else if (nameColumnToPlot == "V5") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "JCR")
     }
 }
