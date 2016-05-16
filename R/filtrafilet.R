@@ -77,10 +77,39 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
+      
+      analise.autor <- strsplit(mydata$Authors, ";")
+      ## Primeiro autor ##
+        prim.autor <- NULL
+        library(stringr)
+        for (i in 1:nrow(mydata))
+        {
+          aux <- str_trim(analise.autor[[i]][1])
+          prim.autor <- c(aux, prim.autor)
+        }
+      ## Autor ##
+        autor <- NULL
+        library(stringr)
+        for (i in 1:length(analise.autor))
+        {
+          for(j in 1:length(analise.autor[[i]]))
+          {
+            aux <- str_trim(analise.autor[[i]][1])
+            autor <- c(aux, autor) 
+          }
+        }
+        tabela.autor <- as.data.frame(table(autor))
+        tabela.autor <- tabela.autor[order(as.numeric(tabela.autor[,2]), decreasing=TRUE),]
+        
+      ## Journals ##
+        tabela.revistas <- as.data.frame(table(mydata$Source.Title)) # contagem de artigos por revista
+        tabela.revistas <- tabela.revistas[order(as.numeric(tabela.revistas[,2]), decreasing=TRUE),] # colocando a contagem em ordem decrescente (revistas com mais artigos)
+  
     if (nameColumnToPlot == "Publication.Year") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
     } else if (nameColumnToPlot == "Authors") {
-        plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por autor")
+      par(las=3) # para deixar o nome dos autores na vertical  
+      barplot(tabela.autor[1:20,2], names.arg = tabela.autor[1:20,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos dos 20 autores com maior quantidade de publicação")
     } else if (nameColumnToPlot == "Source.Title") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por revista")
     } else if (nameColumnToPlot == "V5") {
