@@ -108,7 +108,8 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
     if (nameColumnToPlot == "Publication.Year") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
     } else if (nameColumnToPlot == "Authors") {
-      par(las=3) # para deixar o nome dos autores na vertical  
+      par(las=3) # para deixar o nome dos autores na vertical
+      par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
       barplot(tabela.autor[1:20,2], names.arg = tabela.autor[1:20,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos dos 20 autores com maior quantidade de publicação")
     } else if (nameColumnToPlot == "Source.Title") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por revista")
