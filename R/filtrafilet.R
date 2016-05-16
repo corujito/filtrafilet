@@ -4,6 +4,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     citano  <- as.numeric(citano)
     porcpareto  <- as.numeric(porcpareto)
 	
+    length(which(mydata$Journal.Impact.Factor = -1)) 
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
     filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
    
@@ -14,7 +15,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
     list(
-    message = paste(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos))
+    message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos))
     )
 
     # soma.citacoes <- 0
