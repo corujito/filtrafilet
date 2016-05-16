@@ -106,13 +106,17 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
         tabela.revistas <- tabela.revistas[order(as.numeric(tabela.revistas[,2]), decreasing=TRUE),] # colocando a contagem em ordem decrescente (revistas com mais artigos)
   
     if (nameColumnToPlot == "Publication.Year") {
+        par(las=1)
+        par(mar=c(10, 4.1, 4.1, 2.1)) 
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
     } else if (nameColumnToPlot == "Authors") {
-      par(las=3) # para deixar o nome dos autores na vertical
-      par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
-      barplot(tabela.autor[1:20,2], names.arg = tabela.autor[1:20,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos dos 20 autores com maior quantidade de publicação")
+        par(las=3) # para deixar o nome dos autores na vertical
+        par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
+        barplot(tabela.autor[1:20,2], names.arg = tabela.autor[1:20,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos dos 20 autores com maior quantidade de publicação")
     } else if (nameColumnToPlot == "Source.Title") {
-        plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos por revista")
+      par(las=2)
+      par(mar=c(25, 4.1, 4.1, 2.1)) 
+      barplot(tabela.revistas[1:10,2], names.arg = tabela.revistas[1:10,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos das 10 revistas com maior quantidade de publicação")
     } else if (nameColumnToPlot == "V5") {
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "JCR")
     }
