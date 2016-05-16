@@ -5,7 +5,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     porcpareto  <- as.numeric(porcpareto)
 	
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados, as.numeric(dados$Journal.Impact.Factor)>=jcrmin)
+    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
    
     # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin)# & filtro.jcr$Average.per.Year >= citano)
@@ -14,7 +14,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
     list(
-    message = paste(nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos))
+    message = paste(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos))
     )
 
     # soma.citacoes <- 0
@@ -118,6 +118,6 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
       par(mar=c(25, 4.1, 4.1, 2.1)) 
       barplot(tabela.revistas[1:10,2], names.arg = tabela.revistas[1:10,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos das 10 revistas com maior quantidade de publicação")
     } else if (nameColumnToPlot == "V5") {
-        plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "JCR")
+      hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = 4, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
 }
