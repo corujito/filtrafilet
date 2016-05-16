@@ -9,21 +9,16 @@ uploaddata <- function(csvfile, ...){
   
   #read csv data
   c <- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
-  # eliminando duplicidade por título do artigo #
-  dados <- c[!duplicated(c$Title), ]
-  
   #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
 
-  dados$Source.Title <-toupper(dados$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
+  c$Source.Title <-toupper(c$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
     
-  ## Tirando duplicidade do arquivo de JCR ##
-  jcr <- jcr[!duplicated(jcr$V2), ]
-  
-  #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
-  jcr[,2] <- toupper(jcr[,2]) 
+  ## Base com JCR ##
+  #jcr2 <- read.csv('data/jcr2.csv', header = F, sep = ",")
+  #jcr2 <- jcr2[-1,]
+  jcr2[,2] <- toupper(jcr2[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
 
-  mydata <- merge(x=dados, y=jcr, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
-  mydata <- mydata[!duplicated(mydata$Title), ]
+  mydata <- merge(x=c, y=jcr2, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
   
   #convert columns with 7 or less levels to factors
   for(i in seq_along(mydata)){
@@ -31,24 +26,6 @@ uploaddata <- function(csvfile, ...){
       mydata[[i]] <- as.factor(mydata[[i]]);
     }
   }
-  
-  ######################
-  # tratamento da base #
-  ######################
-  
-  #deixando JCR como numérico 
-  mydata$V5 <- as.numeric(as.character(mydata$V5))
-  mydata$Total.Citations <- as.numeric(as.character(mydata$Total.Citations))
-  
-  # Atribuindo -1 para periódico sem JCR
-  mydata[is.na(mydata$V5), 97] <- -1 #utilizar nome da coluna no lugar de posicao???????
-  
-  # Total citacoes está NA para quando não tem citações. Trocando NA por zero.
-  mydata[is.na(mydata$Total.Citations), 20] <- 0 #utilizar nome da coluna no lugar de posicao???????
-  
-  list(
-    message = paste(nrow(dados), nrow(jcr), nrow(mydata))
-  )
   
   #return dataset
   return(mydata)  
