@@ -17,8 +17,9 @@ uploaddata <- function(csvfile, ...){
   #jcr2 <- read.csv('data/jcr2.csv', header = F, sep = ",")
   #jcr2 <- jcr2[-1,]
   jcr2[,2] <- toupper(jcr2[,2]) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
-
-  mydata <- merge(x=c, y=jcr2, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
+  jcr <- jcr2[!duplicated(jcr2$Title), ] #retirando duplicidade do arquivo jcr
+  
+  mydata <- merge(x=c, y=jcr, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
   
   #convert columns with 7 or less levels to factors
   for(i in seq_along(mydata)){
@@ -26,6 +27,22 @@ uploaddata <- function(csvfile, ...){
       mydata[[i]] <- as.factor(mydata[[i]]);
     }
   }
+  
+  list(
+    message = paste(nrow(jcr), nrow(jcr2), nrow(mydata), nrow(c))
+  )
+  
+  ## Tratamento de algumas variáveis da base ##
+  
+  ## Transformando campo jcr em numerico ##
+  mydata$Journal.Impact.Factor = as.numeric(as.character(mydata$Journal.Impact.Factor))
+  
+  ## Transformando campo total.citations em numerico ##
+  mydata$Total.Citations = as.numeric(as.character(mydata$Total.Citations))
+  
+  ## Substituindo NA de jcr e total de citacoes por 0 ##
+  for (i in which(is.na(mydata$Journal.Impact.Factor)==T)){mydata$Journal.Impact.Factor[i] = -1}  #melhorar codigo sem utilizar for
+  for (i in which(is.na(mydata$Total.Citations)==T)){mydata$Total.Citations[i] = 0} #melhorar codigo sem utilizar for
   
   #return dataset
   return(mydata)  
