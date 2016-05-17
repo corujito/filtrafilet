@@ -51,7 +51,6 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
       }
       
       artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
-      nome.coluna = "Antigos - Filtro pela regra de Pareto"
       
       artigos.antigos <- subset(artigos.antigos.pareto, select = -c(ncol(artigos.antigos.pareto)-1, ncol(artigos.antigos.pareto)))
     } else {artigos.antigos <- filtro.artigos.antigos}
@@ -61,7 +60,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
     quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
                                   nrow(artigos.finais)),c("Quantidade de documentos sem duplicação", "Filtro JCR", "Artigos recentes", "Recentes - Filtro por número de citações por ano",
-                                                          "Artigos antigos", nome.coluna , "Quantidade de artigos selecionados"))
+                                                          "Artigos antigos",  "Antigos - Filtro pela regra de Pareto" , "Quantidade de artigos selecionados"))
   
     library(gridExtra)
     grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
@@ -113,7 +112,7 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
       par(mar=c(25, 4.1, 4.1, 2.1)) 
       barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "V5") {
-      if (max(mydata$V5) - min(mydata$V5[(which(mydata$V5 > 0))]) < 20){aux <- 6} else {aux <- 10}
+      if (max(mydata$V5) - min(mydata$V5[(which(mydata$V5 > 0))]) < 30){aux <- 6} else {aux <- 15}
       hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = aux, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
 }
