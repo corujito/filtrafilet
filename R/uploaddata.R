@@ -41,6 +41,9 @@ uploaddata <- function(csvfile, ...){
   ## Transformando campo total.citations em numerico ##
   mydata$Total.Citations <- as.numeric(as.character(mydata$Total.Citations))
   
+  ## Transformando campo publication.year em numerico ##
+  mydata$Publication.Year <- as.numeric(as.character(mydata$Publication.Year))
+  
   ## Substituindo NA de jcr e total de citacoes por 0 ##
   for (i in which(is.na(mydata$Journal.Impact.Factor)==T)){mydata$Journal.Impact.Factor[i] = -1}  #melhorar codigo sem utilizar for
   for (i in which(is.na(mydata$Total.Citations)==T)){mydata$Total.Citations[i] = 0} #melhorar codigo sem utilizar for
