@@ -12,102 +12,59 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
     #filtro.jcr$Average.per.Year >= citano
     
-    idade.artigo <- 0
-    for (i in 1:nrow(filtro.artigos.recentes)){
-      if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))){
-        idade.artigo[i] <- 1
-      } else {idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - filtro.artigos.recentes$Publication.Year[i])}
-    }
-    artigos.recentes.citacao <- filtro.artigos.recentes[which(filtro.artigos.recentes$Total.Citations/idade.artigo >= citano), ]
+    if (nrow(filtro.artigos.recentes) > 0){
+      idade.artigo <- 0
+      for (i in 1:nrow(filtro.artigos.recentes)){
+        if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))){
+          idade.artigo[i] <- 1
+        } else {idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - filtro.artigos.recentes$Publication.Year[i])}
+      }
+      artigos.recentes.citacao <- filtro.artigos.recentes[which(filtro.artigos.recentes$Total.Citations/idade.artigo >= citano), ]
+    } else {artigos.recentes.citacao <- filtro.artigos.recentes}
     
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
-    soma.citacoes <- 0
-    #filtro.artigos.antigos[150,20] <- 0
-    # Obtendo o total de citações #
-    for (i in 1:nrow(filtro.artigos.antigos)) {
-      if (is.na(filtro.artigos.antigos$Total.Citations[i] ==T)){filtro.artigos.antigos$Total.Citations[i]=0}
-      aux <- filtro.artigos.antigos$Total.Citations[i]
-      soma.citacoes = soma.citacoes + aux
-    }
+    if (nrow(filtro.artigos.antigos) > 0){
+      soma.citacoes <- 0
+      #filtro.artigos.antigos[150,20] <- 0
+      # Obtendo o total de citações #
+      for (i in 1:nrow(filtro.artigos.antigos)) {
+        if (is.na(filtro.artigos.antigos$Total.Citations[i] ==T)){filtro.artigos.antigos$Total.Citations[i]=0}
+        aux <- filtro.artigos.antigos$Total.Citations[i]
+        soma.citacoes = soma.citacoes + aux
+      }
+      
+      # Cálculo da % de citações de cada artigo em relação ao total de citações #
+      filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
+      filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
+      artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
+      
+      # Cálculo da % acumulada de citações #
+      artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
+      for (i in 2:nrow(filtro.artigos.antigos)) {
+        artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
+        aux <- artigos.antigos$Porcentagem.Citacao[i]
+        artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
+      }
+      
+      artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
+      nome.coluna = "Antigos - Filtro pela regra de Pareto"
+      
+      artigos.antigos <- subset(artigos.antigos.pareto, select = -c(ncol(artigos.antigos.pareto)-1, ncol(artigos.antigos.pareto)))
+    } else {artigos.antigos <- filtro.artigos.antigos}
     
-    # Cálculo da % de citações de cada artigo em relação ao total de citações #
-    filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
-    filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
-    artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
+    ## Artigos finais ##
     
-    # Cálculo da % acumulada de citações #
-    artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
-    for (i in 2:nrow(filtro.artigos.antigos)) {
-      artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
-      aux <- artigos.antigos$Porcentagem.Citacao[i]
-      artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
-    }
+    artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
+    quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
+                                  nrow(artigos.finais)),c("Quantidade de documentos sem duplicação", "Filtro JCR", "Artigos recentes", "Recentes - Filtro por número de citações por ano",
+                                                          "Artigos antigos", nome.coluna , "Quantidade de artigos selecionados"))
+  
+    library(gridExtra)
+    grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
     
-    artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
-    
-    artigos.antigos <- subset(artigos.antigos, select = -c(ncol(artigos.antigos)-1, ncol(artigos.antigos)))
-    
-    list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos.pareto)))
-
-    # soma.citacoes <- 0
-    # # filtro.artigos.antigos[150,20] <- 0
-    # # Obtendo o total de citações #
-    # for (i in 1:nrow(filtro.artigos.antigos)) {
-    #   aux <- filtro.artigos.antigos[i,20] # melhorar!! Total.Citations
-    #   soma.citacoes = soma.citacoes + aux
-    # }
-    
-    # # Cálculo da % de citações de cada artigo em relação ao total de citações #
-    # filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
-    # filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
-    # artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
-    
-    # # Cálculo da % acumulada de citações #
-    # artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
-    # for (i in 2:nrow(filtro.artigos.antigos)) {
-    #   artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
-    #   aux <- artigos.antigos$Porcentagem.Citacao[i]
-    #   artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
-    # }
-    
-    # filtro.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
-    
-    # # filtro.pareto <- subset(filtro.pareto, select = -c(100,101))
-    
-    # ## Artigos finais ##
-    # #print(ncol(filtro.artigos.recentes))
-    # #print(ncol(filtro.pareto))
-
-    # artigos.finais <- rbind(filtro.artigos.recentes[,1:nrow(filtro.artigos.recentes)],filtro.pareto[,1:nrow(filtro.artigos.recentes)])
-
-    # ## SAÍDA 1 ##
-    # quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(filtro.pareto), 
-    #                                 nrow(artigos.finais)),c("Quantidade de documentos inciais", "Filtro JCR", "Artigos recentes", 
-    #                                 "Artigos antigos", "Filtro Pareto", "Quantidade de artigos selecionados"))
-   
-    # library(gridExtra)
-
-    # grid.table(quantidade.filtros, cols = c("Quantidade","Filtros")) # TABELA ESTILO GRÁFICO - PARA APARECER NA TELA
-
-    # # ## SAÍDA 2 ##
-
-    # ## Criando arquivo de bibliografi ##
-    # citacao <- 0
-    # for (i in 1:nrow(artigos.finais)){
-    #       citacao[i] <- paste(artigos.finais$Authors[i],". ", artigos.finais$Title[i],". ", artigos.finais$Source.Title[i],", vol.", artigos.finais$Volume[i], 
-    #                  ", p. ", artigos.finais$Beginning.Page[i], "-", artigos.finais$Ending.Page[i], ", ",  artigos.finais$Publication.Year[i], ".", sep="")
-    #      }
-    
-    # write.table(citacao, "/Users/renatapelissari/Downloads/artigos_bibliografia2", sep = " ") # ARQUIVO PARA BIBLIOGRAFIA
-    
-    # ## SAÍDA 3 ##
-    # ## Arquivo com nome dos artigos e numero de citações##
-    # nome.artigos<- cbind(artigos.finais[,2], artigos.finais$Total.Citations)
-    # nome.artigos <- nome.artigos[order(as.numeric(nome.artigos[,2]), decreasing=TRUE),]
-
-    # write.table(nome.artigos, "/Users/renatapelissari/Downloads/nome_artigos_citacoes", sep="\t")
+    list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
