@@ -51,7 +51,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
         }
       }
       
-      artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada < porcpareto)
+      artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada <= porcpareto)
       
       artigos.antigos <- subset(artigos.antigos.pareto, select = -c(ncol(artigos.antigos.pareto)-1, ncol(artigos.antigos.pareto)))
     } else {artigos.antigos <- filtro.artigos.antigos}
