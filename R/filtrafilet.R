@@ -12,7 +12,8 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
     #filtro.jcr$Average.per.Year >= citano
     
-    if (nrow(filtro.artigos.recentes) > 0){
+    # Filtro por número de citacoes anuais dos artigos recentes #
+    if (nrow(filtro.artigos.recentes) > 0){ # se houver artigos recentes, então aplica o filtro de citacao
       idade.artigo <- 0
       for (i in 1:nrow(filtro.artigos.recentes)){
         if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))){
@@ -25,7 +26,8 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
-    if (nrow(filtro.artigos.antigos) > 0){
+    # Filtro pareto dos artigos antigos #
+    if (nrow(filtro.artigos.antigos) > 0){ # se houver artigos antigos, então aplica o filtro de citacao
       soma.citacoes <- 0
       #filtro.artigos.antigos[150,20] <- 0
       # Obtendo o total de citações #
@@ -101,13 +103,15 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
         par(mar=c(10, 4.1, 4.1, 2.1)) 
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
     } else if (nameColumnToPlot == "Authors") {
+        if (nrow(tabela.autor) < 20){aux <- nrow(tabela.autor)} else {aux <- 20}
         par(las=3) # para deixar o nome dos autores na vertical
         par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
-        barplot(tabela.autor[1:20,2], names.arg = tabela.autor[1:20,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos dos 20 autores com maior quantidade de publicação")
+        barplot(tabela.autor[1:aux,2], names.arg = tabela.autor[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos dos ", aux, " autores com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "Source.Title") {
+      if (nrow(tabela.revistas) < 10){aux <- nrow(tabela.revistas)} else {aux <- 10}
       par(las=2)
       par(mar=c(25, 4.1, 4.1, 2.1)) 
-      barplot(tabela.revistas[1:10,2], names.arg = tabela.revistas[1:10,1], ylab ="Quantidade de artigos", col=rainbow(20), main="Quantidade de artigos das 10 revistas com maior quantidade de publicação")
+      barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(20), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "V5") {
       hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = 4, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
