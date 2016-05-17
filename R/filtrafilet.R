@@ -111,7 +111,7 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
       if (nrow(tabela.revistas) < 10){aux <- nrow(tabela.revistas)} else {aux <- 10}
       par(las=2)
       par(mar=c(25, 4.1, 4.1, 2.1)) 
-      barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(20), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
+      barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "V5") {
       hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = 4, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
