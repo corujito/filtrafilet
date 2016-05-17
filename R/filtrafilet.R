@@ -49,8 +49,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     
     artigos.antigos <- subset(artigos.antigos, select = -c(ncol(artigos.antigos)-1, ncol(artigos.antigos)))
     
-    list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow*(artigos.recentes.citacao), 
-    nrow(artigos.antigos.pareto)))
+    list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos.pareto)))
 
     # soma.citacoes <- 0
     # # filtro.artigos.antigos[150,20] <- 0
