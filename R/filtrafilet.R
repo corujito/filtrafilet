@@ -4,7 +4,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     citano  <- as.numeric(citano)
     porcpareto  <- as.numeric(porcpareto)
 	
-    length(which(mydata$Journal.Impact.Factor == -1)) 
+    length(which(dados$Journal.Impact.Factor == -1)) 
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
     filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
    
