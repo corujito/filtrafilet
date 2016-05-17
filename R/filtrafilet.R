@@ -12,6 +12,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
     #filtro.jcr$Average.per.Year >= citano
     
+    idade.artigo <- 0
     for (i in 1:nrow(filtro.artigos.recentes)){
       if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))){
         idade.artigo[i] <- 1
