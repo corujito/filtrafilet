@@ -113,6 +113,7 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
       par(mar=c(25, 4.1, 4.1, 2.1)) 
       barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "V5") {
+      if (max(mydata$V5) - min(mydata$V5[(which(mydata$V5 > 0))]) < 20){aux <- 6} else {aux <- 10}
       hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = 4, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
 }
