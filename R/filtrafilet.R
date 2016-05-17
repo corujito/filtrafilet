@@ -9,7 +9,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
    
     # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
-    filtro.artigos.recentes <- subset(filtro.jcr, filtro.jcr$Publication.Year >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
+    filtro.artigos.recentes <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
     #filtro.jcr$Average.per.Year >= citano
     
     # Filtro por número de citacoes anuais dos artigos recentes #
@@ -18,13 +18,13 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
       for (i in 1:nrow(filtro.artigos.recentes)){
         if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))){
           idade.artigo[i] <- 1
-        } else {idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - filtro.artigos.recentes$Publication.Year[i])}
+        } else {idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - as.numeric(filtro.artigos.recentes$Publication.Year[i]))}
       }
-      artigos.recentes.citacao <- filtro.artigos.recentes[which(filtro.artigos.recentes$Total.Citations/idade.artigo >= citano), ]
+      artigos.recentes.citacao <- filtro.artigos.recentes[which(as.numeric(filtro.artigos.recentes$Total.Citations)/idade.artigo >= citano), ]
     } else {artigos.recentes.citacao <- filtro.artigos.recentes}
     
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
-    filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
+    filtro.artigos.antigos <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) < as.numeric(format(Sys.Date(), "%Y"))-anomin)
     
     # Filtro pareto dos artigos antigos #
     if (nrow(filtro.artigos.antigos) > 0){ # se houver artigos antigos, então aplica o filtro de citacao
