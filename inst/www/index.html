@@ -121,6 +121,8 @@ $(document).ready(function() {
         }, function(output){
           console.log(output.message);
         });
+        
+        $("#filtrabutton").removeAttr("disabled", "disabled");
 
 
     // return $("#plotdiv2").rplot("filtrafilet", {
@@ -304,7 +306,7 @@ $(document).ready(function() {
           </fieldset>         
           
           <fieldset id="buttondiv2">
-            <button id="filtrabutton" type="button" class="btn btn-primary" >Filtrar!</button>
+            <button id="filtrabutton" type="button" class="btn btn-primary" disabled="disabled">Filtrar!</button>
           </fieldset>
 
         </form>
