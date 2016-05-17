@@ -18,7 +18,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
         idade.artigo[i] <- 1
       } else {idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - filtro.artigos.recentes$Publication.Year[i])}
     }
-    artigos.recentes.citacao <- filtro.artigos.recentes[which(filtro.artigos.recentes$Total.Citations/idade.artigo >= cit.ano), ]
+    artigos.recentes.citacao <- filtro.artigos.recentes[which(filtro.artigos.recentes$Total.Citations/idade.artigo >= citano), ]
     
     # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
     filtro.artigos.antigos <- subset(filtro.jcr, filtro.jcr$Publication.Year < as.numeric(format(Sys.Date(), "%Y"))-anomin)
