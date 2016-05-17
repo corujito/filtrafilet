@@ -8,7 +8,7 @@ uploaddata <- function(csvfile, ...){
   }
   
   #read csv data
-  c <<- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
+  c <- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
   #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
 
   c$Source.Title <-toupper(c$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
