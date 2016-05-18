@@ -23,7 +23,7 @@
 $(document).ready(function() {
   
   //globals
-  var dataframe;
+  var dataframe = null;
   // var mapdata;
   // var joincode;
   // var countrycolumn;
@@ -34,7 +34,7 @@ $(document).ready(function() {
     if($("#csvfile")[0].files[0]){
       
       //clear state
-      dataframe = null;
+      // dataframe = null;
       // mapdata = null;
       // joincode = null;
       // countrycolumn = null;
@@ -47,7 +47,8 @@ $(document).ready(function() {
       
       //call uploaddata function
       var req = ocpu.call("uploaddata", {
-        csvfile : $("#csvfile")[0].files[0]    
+        csvfile : $("#csvfile")[0].files[0],
+        data : dataframe
       }, function(session){
         dataframe = session;
         datainfo();

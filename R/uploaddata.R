@@ -1,4 +1,4 @@
-uploaddata <- function(csvfile, ...){
+uploaddata <- function(csvfile, data, ...){
   #init
   #column_name_options <<- c("Publication.Year", "Authors", "Source.Title", "V5")
   #init end
@@ -47,6 +47,10 @@ uploaddata <- function(csvfile, ...){
   ## Substituindo NA de jcr e total de citacoes por 0 ##
   for (i in which(is.na(mydata$Journal.Impact.Factor)==T)){mydata$Journal.Impact.Factor[i] = -1}  #melhorar codigo sem utilizar for
   for (i in which(is.na(mydata$Total.Citations)==T)){mydata$Total.Citations[i] = 0} #melhorar codigo sem utilizar for
+  
+  if (!is.null(data)){
+    mydata <- rbind(mydata,data)
+  }
   
   #return dataset
   return(mydata)  
