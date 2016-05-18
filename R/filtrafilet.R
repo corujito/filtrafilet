@@ -63,8 +63,13 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
           
           artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
           quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
-                                        nrow(artigos.finais)),c("Quantidade de documentos sem duplicação", paste("Quantidade de artigos com JCR >= a ", jcrmin), "Artigos recentes", "Recentes - Filtro por número de citações por ano",
-                                                                "Artigos antigos",  "Antigos - Filtro pela regra de Pareto" , "Quantidade de artigos selecionados"))
+                                        nrow(artigos.finais)),c("Documentos sem duplicação", 
+                                                                paste("Artigos com JCR >= ", jcrmin), 
+                                                                paste("Artigos recentes: publicados a partir do ano ", as.numeric(format(Sys.Date(), "%Y"))-anomin), 
+                                                                paste("Artigos recentes com média anual de citações >= ", citano),
+                                                                paste("Artigos antigos: publicados antes do ano ", as.numeric(format(Sys.Date(), "%Y"))-anomin), 
+                                                                paste("Artigos antigos que juntos representam", porcpareto,"%", "da quantidade total de citações (regra de Pareto)"), 
+                                                                "Quantidade de artigos selecionados"))
           
           ## Criando arquivo de bibliografia ##
           bibliografia <- 0
