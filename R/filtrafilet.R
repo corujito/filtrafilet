@@ -63,10 +63,8 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
                                   nrow(artigos.finais)),c("Quantidade de documentos sem duplicação", "Filtro JCR", "Artigos recentes", "Recentes - Filtro por número de citações por ano",
                                                           "Artigos antigos",  "Antigos - Filtro pela regra de Pareto" , "Quantidade de artigos selecionados"))
   
-    library(gridExtra)
+    #list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
     grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
-    
-    list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
