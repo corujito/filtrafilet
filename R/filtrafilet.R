@@ -101,6 +101,9 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
           aux <- str_trim(analise.autor[[i]][1])
           prim.autor <- c(aux, prim.autor)
         }
+        tabela.prim.autor <- as.data.frame(table(prim.autor))
+        tabela.prim.autor <- tabela.prim.autor[order(as.numeric(tabela.prim.autor[,2]), decreasing=TRUE),]
+        
       ## Autor ##
         autor <- NULL
         library(stringr)
@@ -123,17 +126,22 @@ geragrafico <- function(mydata, nameColumnToPlot, ...){
         par(las=1)
         par(mar=c(10, 4.1, 4.1, 2.1)) 
         plot(table(mydata[[nameColumnToPlot]]), type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
-    } else if (nameColumnToPlot == "Authors") {
+    } else if (nameColumnToPlot == "Author") {
         if (nrow(tabela.autor) < 20){aux <- nrow(tabela.autor)} else {aux <- 20}
         par(las=3) # para deixar o nome dos autores na vertical
         par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
         barplot(tabela.autor[1:aux,2], names.arg = tabela.autor[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos dos ", aux, " autores com maior quantidade de publicação"))
+    } else if (nameColumnToPlot == "First Author") {
+      if (nrow(tabela.prim.autor) < 20){aux <- nrow(tabela.prim.autor)} else {aux <- 20}
+      par(las=3) # para deixar o nome dos autores na vertical
+      par(mar=c(10, 4.1, 4.1, 2.1)) # aumentando espaço do gráfico para caber nome dos autores
+      barplot(tabela.prim.autor[1:aux,2], names.arg = tabela.prim.autor[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos dos ", aux, " primeiros autores com maior quantidade de publicação"))
     } else if (nameColumnToPlot == "Source.Title") {
       if (nrow(tabela.revistas) < 10){aux <- nrow(tabela.revistas)} else {aux <- 10}
       par(las=2)
       par(mar=c(25, 4.1, 4.1, 2.1)) 
       barplot(tabela.revistas[1:aux,2], names.arg = tabela.revistas[1:aux,1], ylab ="Quantidade de artigos", col=rainbow(aux), main=paste("Quantidade de artigos das ", aux, " revistas com maior quantidade de publicação"))
-    } else if (nameColumnToPlot == "V5") {
+    } else if (nameColumnToPlot == "JCR") {
       if (max(mydata$V5) - min(mydata$V5[(which(mydata$V5 > 0))]) < 30){aux <- 6} else {aux <- 15}
       hist(mydata$Journal.Impact.Factor[(which(mydata$Journal.Impact.Factor > 0))], nclass = aux, xlab = "JCR", ylab = "Quantidade de artigos", main = "Distribuição de artigos por JCR - apenas periódicos com JCR", col="blue")
     }
