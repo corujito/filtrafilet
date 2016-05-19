@@ -1,4 +1,6 @@
 filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
+    dados_original_row <- nrow(dados)
+    dados <- dados[!duplicated(dados$Title), ]
     jcrmin  <- as.numeric(jcrmin)
     anomin  <- as.numeric(anomin)
     citano  <- as.numeric(citano)
@@ -62,8 +64,8 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
           ## Artigos finais ##
           
           artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
-          quantidade.filtros <- cbind(c(nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
-                                        nrow(artigos.finais)),c("Documentos sem duplicação", 
+          quantidade.filtros <- cbind(c(dados_original_row, nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
+                                        nrow(artigos.finais)),c("Total de documentos", "Documentos sem duplicação", 
                                                                 paste("Artigos com JCR >= ", jcrmin), 
                                                                 paste("Artigos recentes: publicados a partir do ano ", as.numeric(format(Sys.Date(), "%Y"))-anomin), 
                                                                 paste("Artigos recentes com média anual de citações >= ", citano),
@@ -92,6 +94,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
       
+      mydata <- mydata[!duplicated(mydata$Title), ]
       analise.autor <- strsplit(mydata$Authors, ";")
       ## Primeiro autor ##
         prim.autor <- NULL

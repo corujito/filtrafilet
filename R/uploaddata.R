@@ -20,7 +20,7 @@ uploaddata <- function(csvfile, data, ...){
   jcr <- jcr2[!duplicated(jcr2$Full.Journal.Title), ] #retirando duplicidade do arquivo jcr
   
   mydata <- merge(x=c, y=jcr, by.x = "Source.Title", by.y = "Full.Journal.Title", all.x = TRUE)
-  mydata <- mydata[!duplicated(mydata$Title), ]
+  #mydata <- mydata[!duplicated(mydata$Title), ]
   
   #convert columns with 7 or less levels to factors
   for(i in seq_along(mydata)){
