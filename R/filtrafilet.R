@@ -1,22 +1,32 @@
-filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
+filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
     dados_original_row <- nrow(dados)
     dados <- dados[!duplicated(dados$Title), ]
     jcrmin  <- as.numeric(jcrmin)
     anomin  <- as.numeric(anomin)
     citano  <- as.numeric(citano)
     porcpareto  <- as.numeric(porcpareto)
+    comjcr <- as.numeric(comjcr)
 	
-    length(which(dados$Journal.Impact.Factor == -1)) 
+   # length(which(dados$Journal.Impact.Factor == -1)) 
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
+   if(comjcr == 0)
+    {filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))<0)
+     nome.coluna.jcr <- paste("Artigos sem JCR")
+     }
+     else if(comjcr == 1){
+       filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
+       nome.coluna.jcr <- paste("Artigos com JCR >= ", jcrmin)
+       }
+       else if(comjcr == 2){
+         filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin | as.numeric(as.character(dados$Journal.Impact.Factor))<0)
+         nome.coluna.jcr <- paste("Artigos sem JCR e artigos com JCR >= ", jcrmin)
+         }
+  
     
-    if(nrow(filtro.jcr) = 0){
+    if(nrow(filtro.jcr) == 0){
       stop('Não foi aplicado filtro de JCR - todos os journals com valor de JCR inferior ao selecionado');
-    }
+   }
     
-   ## if(nrow(filtro.jcr) > 0){mydata <- filtro.jcr} else {printar "não foi aplicado filtro de JCR - todos os 
-   ## journals com valor de JCR inferior ao selecionado" & mydata <- dados}
-   
           # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
           filtro.artigos.recentes <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
           #filtro.jcr$Average.per.Year >= citano
@@ -70,7 +80,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
           artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
           quantidade.filtros <- cbind(c(dados_original_row, nrow(dados), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(artigos.recentes.citacao), nrow(filtro.artigos.antigos), nrow(artigos.antigos), 
                                         nrow(artigos.finais)),c("Total de documentos", "Documentos sem duplicação", 
-                                                                paste("Artigos com JCR >= ", jcrmin), 
+                                                                nome.coluna.jcr, 
                                                                 paste("Artigos recentes: publicados a partir do ano ", as.numeric(format(Sys.Date(), "%Y"))-anomin), 
                                                                 paste("Artigos recentes com média anual de citações >= ", citano),
                                                                 paste("Artigos antigos: publicados antes do ano ", as.numeric(format(Sys.Date(), "%Y"))-anomin), 
@@ -92,8 +102,8 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
           
           #write.table(nome.artigos, paste(diretorio, "/", "nome_artigos_citacoes.txt", sep=""), sep="\t")
           
-          #list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
-          grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
+        # list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
+         grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
