@@ -10,6 +10,10 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
     # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
     filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
     
+    if(nrow(filtro.jcr) = 0){
+      stop('Não foi aplicado filtro de JCR - todos os journals com valor de JCR inferior ao selecionado');
+    }
+    
    ## if(nrow(filtro.jcr) > 0){mydata <- filtro.jcr} else {printar "não foi aplicado filtro de JCR - todos os 
    ## journals com valor de JCR inferior ao selecionado" & mydata <- dados}
    
@@ -87,7 +91,7 @@ filtrafilet <- function(dados, jcrmin, anomin, citano, porcpareto) {
           nome.artigos <- nome.artigos[order(as.numeric(nome.artigos[,2]), decreasing=TRUE),]
           
           #write.table(nome.artigos, paste(diretorio, "/", "nome_artigos_citacoes.txt", sep=""), sep="\t")
-        
+          
           #list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
           grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
