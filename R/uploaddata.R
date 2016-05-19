@@ -1,3 +1,19 @@
+rbind.match.columns <- function(input1, input2) {
+  n.input1 <- ncol(input1)
+  n.input2 <- ncol(input2)
+  
+  if (n.input2 < n.input1) {
+    TF.names <- which(names(input2) %in% names(input1))
+    column.names <- names(input2[, TF.names])
+  } else {
+    TF.names <- which(names(input1) %in% names(input2))
+    column.names <- names(input1[, TF.names])
+  }
+  
+  return(rbind(input1[, column.names], input2[, column.names]))
+}
+
+
 uploaddata <- function(csvfile, data, ...){
   #init
   #column_name_options <<- c("Publication.Year", "Authors", "Source.Title", "V5")
@@ -10,7 +26,11 @@ uploaddata <- function(csvfile, data, ...){
   #read csv data
   c <- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
   #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
-
+  
+  if (ncol(c) < 18){colnames(c) <- c("Authors", "Title", "Publication.Year", "Source.Title", "Volume", "Issue", 
+                                                  "Article.Number", "Beginning.Page", "Ending.Page", "Page.count", "Total.Citations", 
+                                                  "DOI", "Link", "Document.Type", "Source", "EID")}
+  
   c$Source.Title <-toupper(c$Source.Title) #Deixando o título dos Journals todo com letra maiuscula, pois será utilizado como chave
     
   ## Base com JCR ##
@@ -44,12 +64,12 @@ uploaddata <- function(csvfile, data, ...){
   ## Transformando campo publication.year em numerico ##
   mydata$Publication.Year <- as.numeric(as.character(mydata$Publication.Year))
   
-  ## Substituindo NA de jcr e total de citacoes por 0 ##
+  ## Substituindo NA de jcr por -1 e total de citacoes por 0 ##
   for (i in which(is.na(mydata$Journal.Impact.Factor)==T)){mydata$Journal.Impact.Factor[i] = -1}  #melhorar codigo sem utilizar for
   for (i in which(is.na(mydata$Total.Citations)==T)){mydata$Total.Citations[i] = 0} #melhorar codigo sem utilizar for
   
   if (!is.null(data)){
-    mydata <- rbind(mydata,data)
+    mydata <- rbind.match.columns(mydata,data)
   }
   
   #return dataset
