@@ -102,8 +102,8 @@ filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
           
           #write.table(nome.artigos, paste(diretorio, "/", "nome_artigos_citacoes.txt", sep=""), sep="\t")
           
-        # list(message = paste(nrow(dados), length(which(dados$Journal.Impact.Factor == -1)), nrow(filtro.jcr), nrow(filtro.artigos.recentes), nrow(filtro.artigos.antigos), nrow(artigos.recentes.citacao),nrow(artigos.antigos)))
-         grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
+         list(message = paste(quantidade.filtros[1], quantidade.filtros[2]))
+         #grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
