@@ -11,5 +11,13 @@ LazyData: true
 Depends:
         R (>= 3.2.4)
 Imports:
-        gridExtra (>= 2.2.1)
+        ggplot2,
+        gridExtra,
+        graphics,
+        grDevices,
+        gtable,
+        grid,
+        utils,
+        lattice,
+        knitr
 Suggests: opencpu (>= 1.0.1)
