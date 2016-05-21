@@ -9,8 +9,7 @@ Description: Seleciona os artigos mais importantes a partir de base grande de ar
 License: Apache2
 LazyData: true
 Depends:
-        R (>= 3.2.4),
-        gridExtra (>= 2.2.1)
+        R (>= 3.2.4)
 Imports:
-        gridExtra
+        gridExtra (>= 2.2.1)
 Suggests: opencpu (>= 1.0.1)

@@ -104,8 +104,7 @@ filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
           
          #list(message = paste(quantidade.filtros[1], quantidade.filtros[2]))
          #library(gridExtra)
-          #print(quantidade.filtros)
-          grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
+         gridExtra::grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
 
 geragrafico <- function(mydata, nameColumnToPlot, ...){
