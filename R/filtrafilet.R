@@ -103,7 +103,7 @@ filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
           #write.table(nome.artigos, paste(diretorio, "/", "nome_artigos_citacoes.txt", sep=""), sep="\t")
           
          #list(message = paste(quantidade.filtros[1], quantidade.filtros[2]))
-         #library(gridExtra)
+         plot(1, type="n", axes=F, xlab="", ylab="")
          gridExtra::grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
 
