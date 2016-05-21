@@ -8,6 +8,6 @@ Maintainer: Kleber <corujito@gmail.com>
 Description: Seleciona os artigos mais importantes a partir de base grande de artigos
 License: Apache2
 LazyData: true
+Depends: R (>= 3.2.4), gridExtra (>= 2.2.1)
 Imports:
-    gridExtra
 Suggests: opencpu (>= 1.0.1)
