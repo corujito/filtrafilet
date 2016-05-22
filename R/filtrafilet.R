@@ -122,7 +122,7 @@ filtrafilet <- function (dados, comjcr, jcrmin, anomin, citano, porcpareto) {
   nome.artigos <- cbind(artigos.finais$Title, artigos.finais$Total.Citations, artigos.finais$V5)
   nome.artigos <- nome.artigos[order(as.numeric(nome.artigos[,2]), decreasing=TRUE),]
   
-  #write.table(nome.artigos, paste(diretorio, "/", "nome_artigos_citacoes.txt", sep=""), sep="\t")
+  write.table(nome.artigos, "nome_artigos_citacoes.txt", sep="\t")
   
   #list(message = paste(quantidade.filtros[1], quantidade.filtros[2]))
   plot(1, type="n", axes=F, xlab="", ylab="")

@@ -114,6 +114,8 @@ $(document).ready(function() {
     $("#filtrabutton").attr("disabled", "disabled");
     $("#bibliografiabutton").attr("href", "")
     $("#bibliografiabutton").attr("disabled", "disabled");
+    $("#artigosbutton").attr("href", "")
+    $("#artigosbutton").attr("disabled", "disabled");
     
     //var req = ocpu.rpc("filtrafilet", {
     //  dados : dataframe,
@@ -140,6 +142,8 @@ $(document).ready(function() {
       $("#filtrabutton").removeAttr("disabled", "disabled");
       $("#bibliografiabutton").attr("href", session.getLoc() + "files/bibliografia.txt")
       $("#bibliografiabutton").removeAttr("disabled", "disabled");
+      $("#artigosbutton").attr("href", session.getLoc() + "files/nome_artigos_citacoes.txt")
+      $("#artigosbutton").removeAttr("disabled", "disabled");
     })
 
     req.fail(function(jqXHR){
@@ -322,7 +326,8 @@ $(document).ready(function() {
      
       </div>
       <fieldset id="buttondiv">
-        <a id="bibliografiabutton" type="button" class="btn btn-primary" disabled="disabled">Baixar!</a>
+        <a id="bibliografiabutton" type="button" target="_blank" class="btn btn-primary" disabled="disabled">Baixar Bibliografia</a>
+        <a id="artigosbutton" type="button" target="_blank" class="btn btn-primary" disabled="disabled">Baixar Artigos Selecionados</a>
       </fieldset>
     </div>
 
