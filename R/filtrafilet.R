@@ -1,4 +1,4 @@
-filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
+filtrafilet <- function (dados, comjcr, jcrmin, anomin, citano, porcpareto) {
   dados_original_row <- nrow(dados)
   dados <- dados[!duplicated(dados$Title), ]
   jcrmin  <- as.numeric(jcrmin)
@@ -116,7 +116,7 @@ filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
       )
   }
   
-  #write.table(bibliografia, paste(diretorio, "/", "bibliografia.txt", sep=""), sep = " ")
+  write.table(bibliografia, "bibliografia.txt", sep = " ")
   
   ## Craindo Arquivo com nome dos artigos e numero de citações ##
   nome.artigos <- cbind(artigos.finais$Title, artigos.finais$Total.Citations, artigos.finais$V5)
@@ -129,8 +129,7 @@ filtrafilet <- function(dados, comjcr, jcrmin, anomin, citano, porcpareto){
   gridExtra::grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
 }
 
-geragrafico <- function(mydata, nameColumnToPlot, ...){
-      
+geragrafico <- function (mydata, nameColumnToPlot, ...) {
   mydata <- mydata[!duplicated(mydata$Title), ]
   analise.autor <- strsplit(mydata$Authors, ";")
   ## Primeiro autor ##

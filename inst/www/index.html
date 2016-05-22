@@ -110,8 +110,10 @@ $(document).ready(function() {
     });
   }
 
-  function filtrafilet(){
+  function filtrafilet() {
     $("#filtrabutton").attr("disabled", "disabled");
+    $("#bibliografiabutton").attr("href", "")
+    $("#bibliografiabutton").attr("disabled", "disabled");
     
     //var req = ocpu.rpc("filtrafilet", {
     //  dados : dataframe,
@@ -127,17 +129,25 @@ $(document).ready(function() {
     //    $("#filtrabutton").removeAttr("disabled", "disabled");
 
 
-    return $("#plotdiv2").rplot("filtrafilet", {
+    var req = $("#plotdiv2").rplot("filtrafilet", {
        dados : dataframe,
        jcrmin : $("#jcrmin").val(),
        comjcr : $("#comjcr").val(),
        anomin : $("#anomin").val(),
        citano : $("#citano").val(),
        porcpareto : $("#porcpareto").val()
-    }).fail(function(jqXHR){
+    }, function(session) {
+      $("#filtrabutton").removeAttr("disabled", "disabled");
+      $("#bibliografiabutton").attr("href", session.getLoc() + "files/bibliografia.txt")
+      $("#bibliografiabutton").removeAttr("disabled", "disabled");
+    })
+
+    req.fail(function(jqXHR){
        errormsg(jqXHR.responseText);
-    }).always(function(){
-     $("#filtrabutton").removeAttr("disabled", "disabled");    
+    })
+
+    req.always( function() {
+     ;
     });
   }
   
@@ -311,6 +321,9 @@ $(document).ready(function() {
         </form>
      
       </div>
+      <fieldset id="buttondiv">
+        <a id="bibliografiabutton" type="button" class="btn btn-primary" disabled="disabled">Baixar!</a>
+      </fieldset>
     </div>
 
     <div class="col-lg-9">
