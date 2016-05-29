@@ -30,18 +30,6 @@ uploaddata <- function(csvfile, data, ...){
     read.table(csvfile, row.names = NULL, skip=4, stringsAsFactors=FALSE, header=TRUE, sep=",")
   })
   
-  
-  #test.error <- try(
-  #  read.table(csvfile, row.names = NULL, stringsAsFactors=FALSE, header=TRUE, sep=",")
-  #  )
-  #if (!inherits(test.error, "try-error")) {
-  #  c <- read.table(csvfile, row.names = NULL, stringsAsFactors=FALSE, header=TRUE, sep=",")
-  #} else {
-  #  c <- read.table(csvfile, row.names = NULL, skip=4, stringsAsFactors=FALSE, header=TRUE, sep=",")
-  #}
- 
-   #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
-  
   if (ncol(c) < 18){colnames(c) <- c("Authors", "Title", "Publication.Year", "Source.Title", "Volume", "Issue", 
                                                   "Article.Number", "Beginning.Page", "Ending.Page", "Page.count", "Total.Citations", 
                                                   "DOI", "Link", "Document.Type", "Source", "EID")}
