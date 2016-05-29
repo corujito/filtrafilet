@@ -19,13 +19,28 @@ uploaddata <- function(csvfile, data, ...){
   #column_name_options <<- c("Publication.Year", "Authors", "Source.Title", "V5")
   #init end
 
-  if(substring(tolower(csvfile), nchar(csvfile)-3) != ".csv"){
-    stop('Uploaded data needs to be .csv file. When using MS Excel, try "Save As" and select type "CSV (comma delimited)"');
-  }
+  #if(substring(tolower(csvfile), nchar(csvfile)-3) != ".csv"){
+   # stop('Uploaded data needs to be .csv file. When using MS Excel, try "Save As" and select type "CSV (comma delimited)"');
+  #}
   
   #read csv data
-  c <- read.csv(csvfile, row.names = NULL, stringsAsFactors=FALSE, ...);
-  #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
+  c = tryCatch({
+    read.table(csvfile, row.names = NULL, stringsAsFactors=FALSE, header=TRUE, sep=",")
+  }, error = function(e) {
+    read.table(csvfile, row.names = NULL, skip=4, stringsAsFactors=FALSE, header=TRUE, sep=",")
+  })
+  
+  
+  #test.error <- try(
+  #  read.table(csvfile, row.names = NULL, stringsAsFactors=FALSE, header=TRUE, sep=",")
+  #  )
+  #if (!inherits(test.error, "try-error")) {
+  #  c <- read.table(csvfile, row.names = NULL, stringsAsFactors=FALSE, header=TRUE, sep=",")
+  #} else {
+  #  c <- read.table(csvfile, row.names = NULL, skip=4, stringsAsFactors=FALSE, header=TRUE, sep=",")
+  #}
+ 
+   #c <- read.csv(csvfile, sep=",", stringsAsFactors=FALSE)
   
   if (ncol(c) < 18){colnames(c) <- c("Authors", "Title", "Publication.Year", "Source.Title", "Volume", "Issue", 
                                                   "Article.Number", "Beginning.Page", "Ending.Page", "Page.count", "Total.Citations", 
