@@ -165,7 +165,7 @@ geragrafico <- function (mydata, nameColumnToPlot, ...) {
       min <- min(as.numeric(names(table(mydata[[nameColumnToPlot]]))))
       max <- max(as.numeric(names(table(mydata[[nameColumnToPlot]]))))
       quantidade.ano <- table(factor(mydata[[nameColumnToPlot]], levels=min:max))
-      plot(quantidade.ano, type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano")
+      plot(quantidade.ano, type="l", col="blue", xlab = "Ano de publicação", ylab = "Quantidade de artigos", main = "Quantidade de artigos publicados por ano", yaxs = "i")
   } else if (nameColumnToPlot == "Author") {
       if (nrow(tabela.autor) < 20){aux <- nrow(tabela.autor)} else {aux <- 20}
       par(las=3) # para deixar o nome dos autores na vertical
