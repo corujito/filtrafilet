@@ -121,6 +121,7 @@ filtrafilet <- function (dados, comjcr, jcrmin, anomin, citano, porcpareto) {
   ## Craindo Arquivo com nome dos artigos e numero de citações ##
   nome.artigos <- cbind(artigos.finais$Title, artigos.finais$Total.Citations, artigos.finais$V5)
   nome.artigos <- nome.artigos[order(as.numeric(nome.artigos[,2]), decreasing=TRUE),]
+  colnames(nome.artigos) <- c("Título", "Número de citações")
   
   write.table(nome.artigos, "nome_artigos_citacoes.txt", sep="\t")
   
