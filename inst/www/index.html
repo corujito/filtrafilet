@@ -291,30 +291,50 @@ $(document).ready(function() {
           </fieldset>    
           
            <fieldset id="datafields2">
+             <legend>JCR</legend>
             <div class="form-group">
-              <label>Com JCR?</label>
-              <input id="comjcr" type="number" min="0" step="1" max="2" value="1" style="text-align: right; width: 70px" class="pull-right"/>
+              <label>Considerar JCR?</label>
+              <select class="form-control pull-right" id="comjcr" style="text-align: right; width: 90px">
+                <option value="1">sem JCR</option>
+                <option value="2" selected="selected">com JCR</option>
+                <option value="3">Todos (com e sem JCR)</option>
+              </select>
             </div>
+          </fieldset>
           
           <fieldset id="datafields2">
             <div class="form-group">
               <label>JCR mínimo</label>
-              <input id="jcrmin" type="number" min="0" step="0.5" max="200" value="1" style="text-align: right; width: 70px" class="pull-right"/>
+              <input id="jcrmin" type="number" min="0" step="0.5" max="200" value="1" style="text-align: right; width: 90px" class="pull-right" title="Valor mínimo de JCR para um arquivo ser considerado (caso JCR tenha sido selecionado)"/>
             </div>
+          </fieldset>
             
+          <fieldset>
+            <legend>Recentes</legend>
             <div class="form-group">
-              <label>Ano Mínimo</label>
-              <input id="anomin" type="number" min="0" step="1" max="20" value="2" style="text-align: right; width: 70px" class="pull-right"/>
-            </div>   
-            
+              <label>Publ. Recentes</label>
+              <select class="form-control pull-right" id="anomin" style="text-align: right; width: 90px">
+                <option value="1">até 1 ano</option>
+                <option value="2" selected="selected">até 2 anos</option>
+                <option value="3">até 3 anos</option>
+                <option value="4">até 4 anos</option>
+                <option value="5">até 5 anos</option>
+              </select>
+            </div>
+          </fieldset>
+          
+          <fieldset>  
             <div class="form-group">
               <label>Méd anual citação</label>
-              <input id="citano" type="number" min="1" step="0.5" max="50" value="0" style="text-align: right; width: 70px" class="pull-right"/>
+              <input id="citano" type="number" min="1" step="0.5" max="50" value="0" style="text-align: right; width: 90px" class="pull-right" title="Valor mínimo de média anual de citação para um artigo recente ser considerado"/>
             </div>
+          </fieldset>
             
+          <fieldset>
+            <legend>Antigos</legend>
             <div class="form-group">
               <label>% Pareto</label>  
-              <input id="porcpareto" type="number" min="0" step="1" max="100" value="80" style="text-align: right; width: 70px" class="pull-right"/>
+              <input id="porcpareto" type="number" min="0" step="1" max="100" value="80" style="text-align: right; width: 90px" class="pull-right" title=""/>
             </div>
           </fieldset>         
           
