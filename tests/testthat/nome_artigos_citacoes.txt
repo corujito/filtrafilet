@@ -1,0 +1,7 @@
+"Título"	"Número de citações"
+"1"	"China's growing CO(2) emissions - A race between increasing consumption and efficiency gains"	"223"
+"2"	"Developing country experience with eco-industrial parks: a case study of the Tianjin Economic-Technological Development Area in China"	"78"
+"3"	"Organizing Self-Organizing Systems"	"51"
+"4"	"The dynamics of industrial symbiosis: a proposal for a conceptual framework based upon a comprehensive literature review"	"48"
+"5"	"Resource consumption of new urban construction in China"	"42"
+"6"	"Implementing China's circular economy concept at the regional level: A review of progress in Dalian, China"	"41"

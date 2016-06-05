@@ -1,0 +1,7 @@
+"x"
+"1" "Peters, Glen P.; Weber, Christopher L.; Guan, Dabo; Hubacek, Klaus. China's growing CO(2) emissions - A race between increasing consumption and efficiency gains. ENVIRONMENTAL SCIENCE & TECHNOLOGY, vol.41, p. 5939-5944, 2007."
+"2" "Shi, Han; Chertow, Marian; Song, Yuyan. Developing country experience with eco-industrial parks: a case study of the Tianjin Economic-Technological Development Area in China. JOURNAL OF CLEANER PRODUCTION, vol.18, p. 191-199, 2010."
+"3" "Chertow, Marian; Ehrenfeld, John. Organizing Self-Organizing Systems. JOURNAL OF INDUSTRIAL ECOLOGY, vol.16, p. 13-27, 2012."
+"4" "Boons, Frank; Spekkink, Wouter; Mouzakitis, Yannis. The dynamics of industrial symbiosis: a proposal for a conceptual framework based upon a comprehensive literature review. JOURNAL OF CLEANER PRODUCTION, vol.19, p. 905-911, 2011."
+"5" "Fernandez, John E.. Resource consumption of new urban construction in China. JOURNAL OF INDUSTRIAL ECOLOGY, vol.11, p. 99-115, 2007."
+"6" "Geng, Yong; Zhu, Qinghua; Doberstein, Brent; Fujita, Tsuyoshi. Implementing China's circular economy concept at the regional level: A review of progress in Dalian, China. WASTE MANAGEMENT, vol.29, p. 996-1002, 2009."

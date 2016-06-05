@@ -1,86 +1,30 @@
 filtrafilet <- function (dados, comjcr, jcrmin, anomin, citano, porcpareto) {
-  dados_original_row <- nrow(dados)
+  dados_original_row <- nrow(dados) #dados é a saida o upload
   dados <- dados[!duplicated(dados$Title), ]
   jcrmin  <- as.numeric(jcrmin)
   anomin  <- as.numeric(anomin)
   citano  <- as.numeric(citano)
   porcpareto  <- as.numeric(porcpareto)
   comjcr <- as.numeric(comjcr)
-	
-   # length(which(dados$Journal.Impact.Factor == -1)) 
-    # ## PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR > 2##
-
+  
   if (comjcr == 0) {
-    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))<0)
     nome.coluna.jcr <- paste("Artigos sem JCR")
   } else if (comjcr == 1) {
-    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin)
     nome.coluna.jcr <- paste("Artigos com JCR >= ", jcrmin)
   } else if (comjcr == 2) {
-    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor))>=jcrmin | as.numeric(as.character(dados$Journal.Impact.Factor))<0)
     nome.coluna.jcr <- paste("Artigos sem JCR e artigos com JCR >= ", jcrmin)
   }
-
-  if (nrow(filtro.jcr) == 0) {
-    stop('Não foi aplicado filtro de JCR - todos os journals com valor de JCR inferior ao selecionado');
-  }
-    
-  # ## SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES (ÚLTIMOS 2 ANOS) ##
-  filtro.artigos.recentes <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
-  #filtro.jcr$Average.per.Year >= citano
   
-  # Filtro por número de citacoes anuais dos artigos recentes #
-  if (nrow(filtro.artigos.recentes) > 0) { # se houver artigos recentes, então aplica o filtro de citacao
-    idade.artigo <- 0
-    for (i in 1:nrow(filtro.artigos.recentes)) {
-      if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))) {
-        idade.artigo[i] <- 1
-      } else {
-        idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - as.numeric(filtro.artigos.recentes$Publication.Year[i]))
-      }
-    }
-    artigos.recentes.citacao <- filtro.artigos.recentes[which(as.numeric(filtro.artigos.recentes$Total.Citations)/idade.artigo >= citano), ]
-  } else {
-    artigos.recentes.citacao <- filtro.artigos.recentes
-  }
-          
-  # ## TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ##
-  filtro.artigos.antigos <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) < as.numeric(format(Sys.Date(), "%Y"))-anomin)
+  filtro.jcr = filtro.jcr(dados, comjcr, jcrmin)
   
-  # Filtro pareto dos artigos antigos #
-  if (nrow(filtro.artigos.antigos) > 0) { # se houver artigos antigos, então aplica o filtro de citacao
-    soma.citacoes <- 0
-    # Obtendo o total de citações #
-    for (i in 1:nrow(filtro.artigos.antigos)) {
-      if (is.na(filtro.artigos.antigos$Total.Citations[i] ==T)) { filtro.artigos.antigos$Total.Citations[i]=0 }
-      aux <- filtro.artigos.antigos$Total.Citations[i]
-      soma.citacoes = soma.citacoes + aux
-    }
-    
-    # Cálculo da % de citações de cada artigo em relação ao total de citações #
-    filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
-    filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
-    artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
-    
-    # Cálculo da % acumulada de citações #
-    artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
-    if (nrow(filtro.artigos.antigos) < 2) {
-      artigos.antigos$porcentagem.acumulada <- 100
-    } else {
-      for (i in 2:nrow(filtro.artigos.antigos)) {
-        artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
-        aux <- artigos.antigos$Porcentagem.Citacao[i]
-        artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
-      }
-    }
-    
-    artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada <= porcpareto)
-    
-    artigos.antigos <- subset(artigos.antigos.pareto, select = -c(ncol(artigos.antigos.pareto)-1, ncol(artigos.antigos.pareto)))
-  } else {
-    artigos.antigos <- filtro.artigos.antigos
-  }
+  filtro.artigos.recentes = filtro.recentes(filtro.jcr, anomin)
   
+  artigos.recentes.citacao = filtro.recentes.citacao(filtro.artigos.recentes, citano)
+  
+  filtro.artigos.antigos = filtro.antigos(filtro.jcr, anomin)
+  
+  artigos.antigos = filtro.antigos.pareto(filtro.artigos.antigos, porcpareto)
+ 
   ## Artigos finais ##
   
   artigos.finais <<- rbind(artigos.recentes.citacao,artigos.antigos)
@@ -128,6 +72,86 @@ filtrafilet <- function (dados, comjcr, jcrmin, anomin, citano, porcpareto) {
   #list(message = paste(quantidade.filtros[1], quantidade.filtros[2]))
   plot(1, type="n", axes=F, xlab="", ylab="")
   gridExtra::grid.table(quantidade.filtros, cols = c("Quantidade","Filtros"))
+}
+
+### PRIMEIRO CRITÉRIO DE INCLUSÃO: JCR MIN ###
+filtro.jcr <- function (dados, comjcr, jcrmin) {
+  if (comjcr == 0) {
+    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor)) < 0)
+  } else if (comjcr == 1) {
+    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor)) >= jcrmin)
+  } else if (comjcr == 2) {
+    filtro.jcr <- subset(dados, as.numeric(as.character(dados$Journal.Impact.Factor)) >= jcrmin | as.numeric(as.character(dados$Journal.Impact.Factor))<0)
+  }
+  if (nrow(filtro.jcr) == 0) {
+    stop('Não foi aplicado filtro de JCR - todos os journals com valor de JCR inferior ao selecionado');
+  }
+  return(filtro.jcr) 
+}
+
+### SEGUNDO CRITÉRIO DE INCLUSÃO: APENAS ARTIGOS RECENTES ###
+filtro.recentes <- function(filtro.jcr, anomin){
+  filtro.artigos.recentes <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) >= as.numeric(format(Sys.Date(), "%Y"))-anomin)
+  return(filtro.artigos.recentes)
+}
+ 
+filtro.recentes.citacao <- function(filtro.artigos.recentes, citano){
+  # Filtro por número de citacoes anuais dos artigos recentes #
+  if (nrow(filtro.artigos.recentes) > 0) { # se houver artigos recentes, então aplica o filtro de citacao
+    idade.artigo <- 0
+    for (i in 1:nrow(filtro.artigos.recentes)) {
+      if (filtro.artigos.recentes$Publication.Year[i] >= as.numeric(format(Sys.Date(), "%Y"))) {
+        idade.artigo[i] <- 1
+      } else {
+        idade.artigo[i] <- ((as.numeric(format(Sys.Date(), "%Y"))) - as.numeric(filtro.artigos.recentes$Publication.Year[i]))
+      }
+    }
+    artigos.recentes.citacao <- filtro.artigos.recentes[which(as.numeric(filtro.artigos.recentes$Total.Citations)/idade.artigo >= citano), ]
+  } else {
+    artigos.recentes.citacao <- filtro.artigos.recentes
+  }
+  return(artigos.recentes.citacao)
+}
+
+### TERCEIRO CRITÉRIO DE INCLUSÃO: PARETO POR NRO DE CITACOES (85%) DOS ARTIGOS ANTIOS (ANTES DOS ÚLTIMOS anomin ANOS) ###
+filtro.antigos <- function(filtro.jcr, anomin){
+  filtro.artigos.antigos <- subset(filtro.jcr, as.numeric(filtro.jcr$Publication.Year) < as.numeric(format(Sys.Date(), "%Y"))-anomin)
+}
+
+filtro.antigos.pareto <- function(filtro.artigos.antigos, porcpareto){
+  # Filtro pareto dos artigos antigos #
+  if (nrow(filtro.artigos.antigos) > 0) { # se houver artigos antigos, então aplica o filtro de citacao
+    soma.citacoes <- 0
+    # Obtendo o total de citações #
+    for (i in 1:nrow(filtro.artigos.antigos)) {
+      if (is.na(filtro.artigos.antigos$Total.Citations[i] ==T)) { filtro.artigos.antigos$Total.Citations[i]=0 }
+      aux <- filtro.artigos.antigos$Total.Citations[i]
+      soma.citacoes = soma.citacoes + aux
+    }
+    
+    # Cálculo da % de citações de cada artigo em relação ao total de citações #
+    filtro.artigos.antigos["Porcentagem.Citacao"] <- 0 #criando uma nova coluna chamada Porcentagem.Citacao
+    filtro.artigos.antigos$Porcentagem.Citacao <- 100*filtro.artigos.antigos$Total.Citations/ soma.citacoes
+    artigos.antigos <- filtro.artigos.antigos[order(-filtro.artigos.antigos$Porcentagem.Citacao),] #ordenando por nro de citação
+    
+    # Cálculo da % acumulada de citações #
+    artigos.antigos["porcentagem.acumulada"] <- 0 #criando uma nova coluna chamada porcentagem.acumulada
+    if (nrow(filtro.artigos.antigos) < 2) {
+      artigos.antigos$porcentagem.acumulada <- 100
+    } else {
+      for (i in 2:nrow(filtro.artigos.antigos)) {
+        artigos.antigos$porcentagem.acumulada[1] = artigos.antigos$Porcentagem.Citacao[1]
+        aux <- artigos.antigos$Porcentagem.Citacao[i]
+        artigos.antigos$porcentagem.acumulada[i] = artigos.antigos$porcentagem.acumulada[i-1] + aux
+      }
+    }
+    
+    artigos.antigos.pareto <- subset(artigos.antigos, artigos.antigos$porcentagem.acumulada <= porcpareto)
+    
+    artigos.antigos <- subset(artigos.antigos.pareto, select = -c(ncol(artigos.antigos.pareto)-1, ncol(artigos.antigos.pareto)))
+  } else {
+    artigos.antigos <- filtro.artigos.antigos
+  }
 }
 
 geragrafico <- function (mydata, nameColumnToPlot, ...) {
