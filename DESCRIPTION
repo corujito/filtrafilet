@@ -12,4 +12,5 @@ Depends:
         R (>= 3.2.4)
 Imports:
         gridExtra
-Suggests: opencpu (>= 1.0.1)
+Suggests: opencpu (>= 1.0.1),
+    testthat
