@@ -86,6 +86,7 @@ filtro.jcr <- function (dados, comjcr, jcrmin) {
   if (nrow(filtro.jcr) == 0) {
     stop('Não foi aplicado filtro de JCR - todos os journals com valor de JCR inferior ao selecionado');
   }
+  filtro.jcr <- filtro.jcr[!duplicated(filtro.jcr$Title), ]
   return(filtro.jcr) 
 }
 

@@ -1,11 +1,9 @@
 context("Upload data")
 
 test_that("uploading 1 file from scopus", {
-  mydata = uploaddata("../../scopus.csv", NULL)
-  expect_equal(nrow(mydata), 10)
-  expect_equal(mydata$Journal.Impact.Factor[which(mydata$Source.Title =="ENVIRONMENTAL SCIENCE & TECHNOLOGY")], 5.33)
-  #expect_that(2 + 2 == 4, is_true())
-  #expect_that(2 == 1, is_false())
+  mydata = uploaddata("../../scopus_2.csv", NULL)
+  expect_equal(nrow(mydata), 315)
+  #expect_equal(mydata$Journal.Impact.Factor[which(mydata$Source.Title =="EUROPEAN JOURNAL OF OPERATIONAL RESEARCH")], 2,358)
 })
 
 test_that("uploading 1 file from web science", {
